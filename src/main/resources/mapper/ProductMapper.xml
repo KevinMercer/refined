@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tina.dao.ProductMapper">
+	<resultMap id="BaseResultMap" type="com.tina.entity.Product">
+		<id column="product_id" jdbcType="INTEGER" property="product_id" />
+		<result column="product_name" jdbcType="VARCHAR" property="product_name" />
+		<result column="repository" jdbcType="INTEGER" property="repository" />
+		<result column="product_pic" jdbcType="VARCHAR" property="product_pic" />
+		<result column="create_time" jdbcType="DATE" property="create_time" />
+		<result column="market_time" jdbcType="DATE" property="market_time" />
+		<result column="enable" jdbcType="INTEGER" property="enable" />
+		<result column="product_desc" jdbcType="VARCHAR" property="product_desc"/>
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		product_id, product_name, repository, product_pic, create_time, market_time, enable, product_desc
+	</sql>
+	<select id="selectByExample" parameterType="com.tina.entity.ProductExample" resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from product
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from product
+		where product_id = #{product_id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from product
+		where product_id = #{product_id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.tina.entity.ProductExample">
+		delete from product
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.tina.entity.Product">
+		insert into product (product_id, product_name, repository,
+		product_pic, create_time, market_time,
+		enable)
+		values (#{product_id,jdbcType=INTEGER}, #{product_name,jdbcType=VARCHAR}, #{repository,jdbcType=INTEGER},
+		#{product_pic,jdbcType=VARCHAR}, #{create_time,jdbcType=DATE}, #{market_time,jdbcType=DATE},
+		#{enable,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tina.entity.Product">
+		insert into product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="product_id != null">
+				product_id,
+			</if>
+			<if test="product_name != null">
+				product_name,
+			</if>
+			<if test="repository != null">
+				repository,
+			</if>
+			<if test="product_pic != null">
+				product_pic,
+			</if>
+			<if test="create_time != null">
+				create_time,
+			</if>
+			<if test="market_time != null">
+				market_time,
+			</if>
+			<if test="enable != null">
+				enable,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="product_id != null">
+				#{product_id,jdbcType=INTEGER},
+			</if>
+			<if test="product_name != null">
+				#{product_name,jdbcType=VARCHAR},
+			</if>
+			<if test="repository != null">
+				#{repository,jdbcType=INTEGER},
+			</if>
+			<if test="product_pic != null">
+				#{product_pic,jdbcType=VARCHAR},
+			</if>
+			<if test="create_time != null">
+				#{create_time,jdbcType=DATE},
+			</if>
+			<if test="market_time != null">
+				#{market_time,jdbcType=DATE},
+			</if>
+			<if test="enable != null">
+				#{enable,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.tina.entity.ProductExample" resultType="java.lang.Long">
+		select count(*) from product
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update product
+		<set>
+			<if test="record.product_id != null">
+				product_id = #{record.product_id,jdbcType=INTEGER},
+			</if>
+			<if test="record.product_name != null">
+				product_name = #{record.product_name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.repository != null">
+				repository = #{record.repository,jdbcType=INTEGER},
+			</if>
+			<if test="record.product_pic != null">
+				product_pic = #{record.product_pic,jdbcType=VARCHAR},
+			</if>
+			<if test="record.create_time != null">
+				create_time = #{record.create_time,jdbcType=DATE},
+			</if>
+			<if test="record.market_time != null">
+				market_time = #{record.market_time,jdbcType=DATE},
+			</if>
+			<if test="record.enable != null">
+				enable = #{record.enable,jdbcType=INTEGER},
+			</if>
+			<if test="record.product_desc != null">
+				enable = #{record.product_desc,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update product
+		set product_id = #{record.product_id,jdbcType=INTEGER},
+		product_name = #{record.product_name,jdbcType=VARCHAR},
+		repository = #{record.repository,jdbcType=INTEGER},
+		product_pic = #{record.product_pic,jdbcType=VARCHAR},
+		create_time = #{record.create_time,jdbcType=DATE},
+		market_time = #{record.market_time,jdbcType=DATE},
+		enable = #{record.enable,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.tina.entity.Product">
+		update product
+		<set>
+			<if test="product_name != null">
+				product_name = #{product_name,jdbcType=VARCHAR},
+			</if>
+			<if test="repository != null">
+				repository = #{repository,jdbcType=INTEGER},
+			</if>
+			<if test="product_pic != null">
+				product_pic = #{product_pic,jdbcType=VARCHAR},
+			</if>
+			<if test="create_time != null">
+				create_time = #{create_time,jdbcType=DATE},
+			</if>
+			<if test="market_time != null">
+				market_time = #{market_time,jdbcType=DATE},
+			</if>
+			<if test="enable != null">
+				enable = #{enable,jdbcType=INTEGER},
+			</if>
+		</set>
+		where product_id = #{product_id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.tina.entity.Product">
+		update product
+		set product_name = #{product_name,jdbcType=VARCHAR},
+		repository = #{repository,jdbcType=INTEGER},
+		product_pic = #{product_pic,jdbcType=VARCHAR},
+		create_time = #{create_time,jdbcType=DATE},
+		market_time = #{market_time,jdbcType=DATE},
+		enable = #{enable,jdbcType=INTEGER}
+		where product_id = #{product_id,jdbcType=INTEGER}
+	</update>
+	<select id="selectProductPage" parameterType="map" resultMap="BaseResultMap">
+		select * from product
+		<where>
+			<if test="key != null and key != ''">
+				AND (product_name LIKE '%${key}%' OR product_desc LIKE '%${key}%')
+			</if>
+		</where>
+		ORDER BY product_id ASC LIMIT #{start}, #{length}
+	</select>
+	<select id="countProduct" parameterType="map" resultType="int">
+		select count(*) from product
+		<where>
+			<if test="key != null and key != ''">
+				AND (product_name LIKE '%${key}%' OR product_desc LIKE '%${key}%')
+			</if>
+		</where>
+	</select>
+	<select id="selectEnableProduct" resultMap="BaseResultMap">
+		select * from product where enable = 1
+	</select>
+	<delete id="deleteProductBatch" parameterType="list">
+		delete from product where product_id in
+		<foreach item="item" collection="list" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+</mapper>

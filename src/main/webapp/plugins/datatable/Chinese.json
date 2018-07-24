@@ -1,0 +1,24 @@
+{
+	"sProcessing": "<img src='${pageContext.request.contextPage }/UI/icon/XiaYiYe.png'>  努力加载数据中.",
+	"sLengthMenu": "每页显示 _MENU_ 条记录",
+	"sZeroRecords": "抱歉， 没有找到",
+	"sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+	"sInfoEmpty": "找不到数据",
+	"sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+	"sInfoPostFix": "",
+	"sSearch": "搜索:",
+	"sUrl": "",
+	"sEmptyTable": "表中数据为空",
+	"sLoadingRecords": "载入记录中...",
+	"sInfoThousands": ",",
+	"oPaginate": {
+		"sFirst": "首页",
+		"sPrevious": "前一页",
+		"sNext": "后一页",
+		"sLast": "尾页"
+	},
+	"oAria": {
+		"sSortAscending": ": 以升序排列此列",
+		"sSortDescending": ": 以降序排列此列"
+	}
+}

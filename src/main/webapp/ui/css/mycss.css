@@ -1,0 +1,137 @@
+@CHARSET "UTF-8";
+
+.nromalTitle {
+	color: #15FF41;
+	font-family: "华文新魏";
+	font-size: 36px;
+}
+
+.loginTitle {
+	color: #15FF41;
+	font-family: "楷体";
+	font-size: 24px;
+}
+
+.addTable {
+	margin: 0px auto;
+}
+
+.personTable {
+	margin: 0px auto;
+	height: 80%;
+}
+
+.infoTd {
+	text-align: right;
+}
+
+.inputTd {
+	text-align: left;
+}
+
+.titleTd {
+	text-align: center;
+}
+
+.infoFont {
+	color: #36A5C4;
+	font-family: "楷体";
+	font-size: 24px;
+}
+
+.personFont {
+	font-family: "宋体";
+	font-size: 16px;
+}
+
+.normalButton {
+	background-color: threedshadow;
+	size: auto;
+}
+
+.nromalOperation {
+	text-decoration: none;
+	font-family: "宋体";
+}
+
+.nromalOperation:HOVER {
+	color: #66FA1D;
+}
+
+.normalInputTd {
+	width: 170px;
+	height: 20px;
+}
+
+body {
+	padding: 70px;
+	margin: 0px;
+	height: 768px;
+}
+
+.main {
+	margin: 20px;
+}
+
+.fixmenu {
+	width: 100%;
+	height: 45px;
+	padding: 5px 5px;
+	position: fixed;
+	top: 0;
+	background-color: #3ac5a5;
+	z-index: 1;
+}
+
+.menu-fixed li {
+	display: inline;
+	padding: 0 10px;
+	margin: 0;
+}
+
+.menu-fixed a {
+	ont-size: 0.9em;
+	color: #fff;
+	padding: 0 0 0 10px;
+	text-decoration: none;
+}
+
+#scrolltotop {
+	color: #f09226;
+}
+
+.tableDiv {
+	margin-top: 0px;
+	z-index: 0;
+}
+
+.formInfoTd {
+	text-align: right;
+}
+
+.formInputTd {
+	text-align: left;
+}
+
+.formTipTd {
+	text-align: left;
+}
+
+.copyright {
+	font-family: "宋体";
+	font-size: 14px;
+	color: #8e8b94;
+	margin: 0px auto;
+	text-align: center;
+}
+
+.protal {
+	width: 200px;
+	height: 200px;
+}
+
+.bodyFrameDiv {
+	height: 700px;
+	overflow: auto;
+	overflow-x: hidden;
+}

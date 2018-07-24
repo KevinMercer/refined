@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tina.dao.ExtractMapper">
+	<resultMap id="BaseResultMap" type="com.tina.entity.Extract">
+		<id column="extract_no" jdbcType="INTEGER" property="extract_no" />
+		<result column="empno" jdbcType="INTEGER" property="empno" />
+		<result column="product_id" jdbcType="INTEGER" property="product_id" />
+		<result column="approve" jdbcType="INTEGER" property="approve" />
+		<result column="copy" jdbcType="INTEGER" property="copy" />
+		<result column="approve_status" jdbcType="INTEGER" property="approve_status" />
+		<result column="approve_describe" jdbcType="VARCHAR" property="approve_describe" />
+		<result column="extract" jdbcType="INTEGER" property="extract" />
+		<result column="extract_date" jdbcType="DATE" property="extract_date" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		extract_no, empno, product_id, approve, copy, approve_status, approve_describe, extract,
+		extract_date
+	</sql>
+	<select id="selectByExample" parameterType="com.tina.entity.ExtractExample" resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from extract
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from extract
+		where extract_no = #{extract_no,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from extract
+		where extract_no = #{extract_no,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.tina.entity.ExtractExample">
+		delete from extract
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.tina.entity.Extract">
+		insert into extract (extract_no, empno, product_id,
+		approve, copy, approve_status,
+		approve_describe, extract, extract_date
+		)
+		values (#{extract_no,jdbcType=INTEGER}, #{empno,jdbcType=INTEGER},
+		#{product_id,jdbcType=INTEGER},
+		#{approve,jdbcType=INTEGER}, #{copy,jdbcType=INTEGER}, #{approve_status,jdbcType=INTEGER},
+		#{approve_describe,jdbcType=VARCHAR}, #{extract,jdbcType=INTEGER}, #{extract_date,jdbcType=DATE}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.tina.entity.Extract">
+		insert into extract
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="extract_no != null">
+				extract_no,
+			</if>
+			<if test="empno != null">
+				empno,
+			</if>
+			<if test="product_id != null">
+				product_id,
+			</if>
+			<if test="approve != null">
+				approve,
+			</if>
+			<if test="copy != null">
+				copy,
+			</if>
+			<if test="approve_status != null">
+				approve_status,
+			</if>
+			<if test="approve_describe != null">
+				approve_describe,
+			</if>
+			<if test="extract != null">
+				extract,
+			</if>
+			<if test="extract_date != null">
+				extract_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="extract_no != null">
+				#{extract_no,jdbcType=INTEGER},
+			</if>
+			<if test="empno != null">
+				#{empno,jdbcType=INTEGER},
+			</if>
+			<if test="product_id != null">
+				#{product_id,jdbcType=INTEGER},
+			</if>
+			<if test="approve != null">
+				#{approve,jdbcType=INTEGER},
+			</if>
+			<if test="copy != null">
+				#{copy,jdbcType=INTEGER},
+			</if>
+			<if test="approve_status != null">
+				#{approve_status,jdbcType=INTEGER},
+			</if>
+			<if test="approve_describe != null">
+				#{approve_describe,jdbcType=VARCHAR},
+			</if>
+			<if test="extract != null">
+				#{extract,jdbcType=INTEGER},
+			</if>
+			<if test="extract_date != null">
+				#{extract_date,jdbcType=DATE},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.tina.entity.ExtractExample" resultType="java.lang.Long">
+		select count(*) from extract
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update extract
+		<set>
+			<if test="record.extract_no != null">
+				extract_no = #{record.extract_no,jdbcType=INTEGER},
+			</if>
+			<if test="record.empno != null">
+				empno = #{record.empno,jdbcType=INTEGER},
+			</if>
+			<if test="record.product_id != null">
+				product_id = #{record.product_id,jdbcType=INTEGER},
+			</if>
+			<if test="record.approve != null">
+				approve = #{record.approve,jdbcType=INTEGER},
+			</if>
+			<if test="record.copy != null">
+				copy = #{record.copy,jdbcType=INTEGER},
+			</if>
+			<if test="record.approve_status != null">
+				approve_status = #{record.approve_status,jdbcType=INTEGER},
+			</if>
+			<if test="record.approve_describe != null">
+				approve_describe = #{record.approve_describe,jdbcType=VARCHAR},
+			</if>
+			<if test="record.extract != null">
+				extract = #{record.extract,jdbcType=INTEGER},
+			</if>
+			<if test="record.extract_date != null">
+				extract_date = #{record.extract_date,jdbcType=DATE},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update extract
+		set extract_no = #{record.extract_no,jdbcType=INTEGER},
+		empno = #{record.empno,jdbcType=INTEGER},
+		product_id = #{record.product_id,jdbcType=INTEGER},
+		approve = #{record.approve,jdbcType=INTEGER},
+		copy =
+		#{record.copy,jdbcType=INTEGER},
+		approve_status = #{record.approve_status,jdbcType=INTEGER},
+		approve_describe = #{record.approve_describe,jdbcType=VARCHAR},
+		extract = #{record.extract,jdbcType=INTEGER},
+		extract_date =
+		#{record.extract_date,jdbcType=DATE}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.tina.entity.Extract">
+		update extract
+		<set>
+			<if test="empno != null">
+				empno = #{empno,jdbcType=INTEGER},
+			</if>
+			<if test="product_id != null">
+				product_id = #{product_id,jdbcType=INTEGER},
+			</if>
+			<if test="approve != null">
+				approve = #{approve,jdbcType=INTEGER},
+			</if>
+			<if test="copy != null">
+				copy = #{copy,jdbcType=INTEGER},
+			</if>
+			<if test="approve_status != null">
+				approve_status = #{approve_status,jdbcType=INTEGER},
+			</if>
+			<if test="approve_describe != null">
+				approve_describe = #{approve_describe,jdbcType=VARCHAR},
+			</if>
+			<if test="extract != null">
+				extract = #{extract,jdbcType=INTEGER},
+			</if>
+			<if test="extract_date != null">
+				extract_date = #{extract_date,jdbcType=DATE},
+			</if>
+		</set>
+		where extract_no = #{extract_no,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.tina.entity.Extract">
+		update extract
+		set empno = #{empno,jdbcType=INTEGER},
+		product_id = #{product_id,jdbcType=INTEGER},
+		approve = #{approve,jdbcType=INTEGER},
+		copy = #{copy,jdbcType=INTEGER},
+		approve_status =
+		#{approve_status,jdbcType=INTEGER},
+		approve_describe = #{approve_describe,jdbcType=VARCHAR},
+		extract = #{extract,jdbcType=INTEGER},
+		extract_date = #{extract_date,jdbcType=DATE}
+		where extract_no = #{extract_no,jdbcType=INTEGER}
+	</update>
+	<select id="selectApprove" parameterType="int" resultType="map">
+		select t.*, pd.product_name product_name from(select et.extract_no extract_no, et.empno empno, et.product_id product_id, et.approve approve, et.approve_describe
+		approve_describe, et.extract extract, et.extract_date extract_date, emp.empname from extract et left join empinfo emp on emp.empno = et.empno where approve = #{id} and et.approve_status = 1) t left join product pd on t.product_id =
+		pd.product_id
+	</select>
+	<select id="countApprove" parameterType="int" resultType="int">
+		select count(*) from extract where approve = #{id}
+	</select>
+</mapper>

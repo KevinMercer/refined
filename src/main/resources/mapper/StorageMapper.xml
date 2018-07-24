@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tina.dao.StorageMapper">
+	<resultMap id="BaseResultMap" type="com.tina.entity.Storage">
+		<id column="storage_no" jdbcType="INTEGER" property="storage_no" />
+		<result column="product_id" jdbcType="INTEGER" property="product_id" />
+		<result column="storage_date" jdbcType="DATE" property="storage_date" />
+		<result column="operator" jdbcType="INTEGER" property="operator" />
+		<result column="number" jdbcType="INTEGER" property="number" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		storage_no, product_id, storage_date, operator, number
+	</sql>
+	<select id="selectByExample" parameterType="com.tina.entity.StorageExample" resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from storage
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from storage
+		where storage_no = #{storage_no,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from storage
+		where storage_no = #{storage_no,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.tina.entity.StorageExample">
+		delete from storage
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.tina.entity.Storage">
+		insert into storage (storage_no, product_id, storage_date,
+		operator, number)
+		values (#{storage_no,jdbcType=INTEGER}, #{product_id,jdbcType=INTEGER}, #{storage_date,jdbcType=DATE},
+		#{operator,jdbcType=INTEGER}, #{number,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tina.entity.Storage">
+		insert into storage
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="storage_no != null">
+				storage_no,
+			</if>
+			<if test="product_id != null">
+				product_id,
+			</if>
+			<if test="storage_date != null">
+				storage_date,
+			</if>
+			<if test="operator != null">
+				operator,
+			</if>
+			<if test="number != null">
+				number,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="storage_no != null">
+				#{storage_no,jdbcType=INTEGER},
+			</if>
+			<if test="product_id != null">
+				#{product_id,jdbcType=INTEGER},
+			</if>
+			<if test="storage_date != null">
+				#{storage_date,jdbcType=DATE},
+			</if>
+			<if test="operator != null">
+				#{operator,jdbcType=INTEGER},
+			</if>
+			<if test="number != null">
+				#{number,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.tina.entity.StorageExample" resultType="java.lang.Long">
+		select count(*) from storage
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<select id="selectStorageLog" parameterType="map" resultType="map">
+		select s.*, e.empname from (select stg.*, pd.product_name from storage stg left join product pd on stg.product_id = pd.product_id) s left join empinfo e on s.operator = e.empno
+		<where>
+			<if test="key != null and key != ''">
+				AND (e.empname LIKE '%${key}%' OR s.product_name LIKE '%${key}%' OR s.number LIKE '%${key}%' OR s.storage_date LIKE '%${key}%')
+			</if>
+		</where>
+		ORDER BY s.storage_no ASC LIMIT #{start}, #{length}
+	</select>
+	<select id="countStorageLog" parameterType="map" resultType="int">
+		select count(*) from(
+			select s.*, e.empname from (select stg.*, pd.product_name from storage stg left join product pd on stg.product_id = pd.product_id) s left join empinfo e on s.operator = e.empno
+			<where>
+				<if test="key != null and key != ''">
+					AND (e.empname LIKE '%${key}%' OR s.product_name LIKE '%${key}%' OR s.number LIKE '%${key}%' OR s.storage_date LIKE '%${key}%')
+				</if>
+			</where>
+		) t
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update storage
+		<set>
+			<if test="record.storage_no != null">
+				storage_no = #{record.storage_no,jdbcType=INTEGER},
+			</if>
+			<if test="record.product_id != null">
+				product_id = #{record.product_id,jdbcType=INTEGER},
+			</if>
+			<if test="record.storage_date != null">
+				storage_date = #{record.storage_date,jdbcType=DATE},
+			</if>
+			<if test="record.operator != null">
+				operator = #{record.operator,jdbcType=INTEGER},
+			</if>
+			<if test="record.number != null">
+				number = #{record.number,jdbcType=INTEGER},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update storage
+		set storage_no = #{record.storage_no,jdbcType=INTEGER},
+		product_id = #{record.product_id,jdbcType=INTEGER},
+		storage_date = #{record.storage_date,jdbcType=DATE},
+		operator = #{record.operator,jdbcType=INTEGER},
+		number =
+		#{record.number,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.tina.entity.Storage">
+		update storage
+		<set>
+			<if test="product_id != null">
+				product_id = #{product_id,jdbcType=INTEGER},
+			</if>
+			<if test="storage_date != null">
+				storage_date = #{storage_date,jdbcType=DATE},
+			</if>
+			<if test="operator != null">
+				operator = #{operator,jdbcType=INTEGER},
+			</if>
+			<if test="number != null">
+				number = #{number,jdbcType=INTEGER},
+			</if>
+		</set>
+		where storage_no = #{storage_no,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.tina.entity.Storage">
+		update storage
+		set product_id = #{product_id,jdbcType=INTEGER},
+		storage_date = #{storage_date,jdbcType=DATE},
+		operator = #{operator,jdbcType=INTEGER},
+		number = #{number,jdbcType=INTEGER}
+		where storage_no = #{storage_no,jdbcType=INTEGER}
+	</update>
+</mapper>

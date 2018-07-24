@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tina.dao.EmpinfoMapper">
+	<resultMap id="BaseResultMap" type="com.tina.entity.Empinfo">
+		<id column="empno" jdbcType="INTEGER" property="empno" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="empname" jdbcType="VARCHAR" property="empname" />
+		<result column="deptno" jdbcType="INTEGER" property="deptno" />
+		<result column="roleid" jdbcType="INTEGER" property="roleid" />
+		<result column="salary" jdbcType="DECIMAL" property="salary" />
+		<result column="hiredate" jdbcType="DATE" property="hiredate" />
+		<result column="superior" jdbcType="INTEGER" property="superior" />
+		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+	</resultMap>
+	<resultMap type="com.tina.entity.AdvancedEmpinfo" id="AdvancedResultMap">
+		<id column="empno" jdbcType="INTEGER" property="empno" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="empname" jdbcType="VARCHAR" property="empname" />
+		<result column="deptno" jdbcType="INTEGER" property="deptno" />
+		<result column="roleid" jdbcType="INTEGER" property="roleid" />
+		<result column="salary" jdbcType="DECIMAL" property="salary" />
+		<result column="hiredate" jdbcType="DATE" property="hiredate" />
+		<result column="superior" jdbcType="INTEGER" property="superior" />
+		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<association property="deptinfo" javaType="com.tina.entity.Deptinfo">
+			<result column="deptno" jdbcType="INTEGER" property="deptno" />
+			<result column="deptname" jdbcType="VARCHAR" property="deptname" />
+			<result column="deptdesc" jdbcType="VARCHAR" property="deptdesc" />
+		</association>
+		<association property="roleinfo" javaType="com.tina.entity.Roleinfo">
+			<result column="roleId" property="roleId" />
+			<result column="roleName" property="roleName" />
+			<result column="roleDesc" property="roleDesc" />
+		</association>
+		<association property="manager" javaType="com.tina.entity.Empinfo">
+			<result column="supername" property="empname" />
+		</association>
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		empno, password, empname, deptno, roleid, salary, hiredate, superior, telephone, email
+	</sql>
+	<select id="selectByExample" parameterType="com.tina.entity.EmpinfoExample" resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from empinfo
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from empinfo
+		where empno = #{empno,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from empinfo
+		where empno = #{empno,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.tina.entity.EmpinfoExample">
+		delete from empinfo
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.tina.entity.Empinfo">
+		insert into empinfo (empno, password, empname,
+		deptno, roleid, salary,
+		hiredate, superior, telephone,
+		email)
+		values (#{empno,jdbcType=INTEGER}, #{password,jdbcType=VARCHAR}, #{empname,jdbcType=VARCHAR},
+		#{deptno,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER}, #{salary,jdbcType=DECIMAL},
+		#{hiredate,jdbcType=DATE}, #{superior,jdbcType=INTEGER}, #{telephone,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tina.entity.Empinfo">
+		insert into empinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="empno != null">
+				empno,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="empname != null">
+				empname,
+			</if>
+			<if test="deptno != null">
+				deptno,
+			</if>
+			<if test="roleid != null">
+				roleid,
+			</if>
+			salary,
+			<if test="hiredate != null">
+				hiredate,
+			</if>
+			<if test="superior != null">
+				superior,
+			</if>
+			<if test="telephone != null">
+				telephone,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="empno != null">
+				#{empno,jdbcType=INTEGER},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="empname != null">
+				#{empname,jdbcType=VARCHAR},
+			</if>
+			<if test="deptno != null">
+				#{deptno,jdbcType=INTEGER},
+			</if>
+			<if test="roleid != null">
+				#{roleid,jdbcType=INTEGER},
+			</if>
+			#{salary,jdbcType=DECIMAL},
+			<if test="hiredate != null">
+				#{hiredate,jdbcType=DATE},
+			</if>
+			<if test="superior != null">
+				#{superior,jdbcType=INTEGER},
+			</if>
+			<if test="telephone != null">
+				#{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.tina.entity.EmpinfoExample" resultType="java.lang.Long">
+		select count(*) from empinfo
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update empinfo
+		<set>
+			<if test="record.empno != null">
+				empno = #{record.empno,jdbcType=INTEGER},
+			</if>
+			<if test="record.password != null">
+				password = #{record.password,jdbcType=VARCHAR},
+			</if>
+			<if test="record.empname != null">
+				empname = #{record.empname,jdbcType=VARCHAR},
+			</if>
+			<if test="record.deptno != null">
+				deptno = #{record.deptno,jdbcType=INTEGER},
+			</if>
+			<if test="record.roleid != null">
+				roleid = #{record.roleid,jdbcType=INTEGER},
+			</if>
+			<if test="record.salary != null">
+				salary = #{record.salary,jdbcType=DECIMAL},
+			</if>
+			<if test="record.hiredate != null">
+				hiredate = #{record.hiredate,jdbcType=DATE},
+			</if>
+			<if test="record.superior != null">
+				superior = #{record.superior,jdbcType=INTEGER},
+			</if>
+			<if test="record.telephone != null">
+				telephone = #{record.telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.email != null">
+				email = #{record.email,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update empinfo
+		set empno = #{record.empno,jdbcType=INTEGER},
+		password = #{record.password,jdbcType=VARCHAR},
+		empname = #{record.empname,jdbcType=VARCHAR},
+		deptno = #{record.deptno,jdbcType=INTEGER},
+		roleid = #{record.roleid,jdbcType=INTEGER},
+		salary = #{record.salary,jdbcType=DECIMAL},
+		hiredate = #{record.hiredate,jdbcType=DATE},
+		superior = #{record.superior,jdbcType=INTEGER},
+		telephone = #{record.telephone,jdbcType=VARCHAR},
+		email = #{record.email,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.tina.entity.Empinfo">
+		update empinfo
+		<set>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="empname != null">
+				empname = #{empname,jdbcType=VARCHAR},
+			</if>
+			<if test="deptno != null">
+				deptno = #{deptno,jdbcType=INTEGER},
+			</if>
+			<if test="roleid != null">
+				roleid = #{roleid,jdbcType=INTEGER},
+			</if>
+			<if test="salary != null">
+				salary = #{salary,jdbcType=DECIMAL},
+			</if>
+			<if test="hiredate != null">
+				hiredate = #{hiredate,jdbcType=DATE},
+			</if>
+			<if test="superior != null">
+				superior = #{superior,jdbcType=INTEGER},
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where empno = #{empno,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.tina.entity.Empinfo">
+		update empinfo
+		set password = #{password,jdbcType=VARCHAR},
+		empname = #{empname,jdbcType=VARCHAR},
+		deptno = #{deptno,jdbcType=INTEGER},
+		roleid = #{roleid,jdbcType=INTEGER},
+		salary =
+		#{salary,jdbcType=DECIMAL},
+		hiredate = #{hiredate,jdbcType=DATE},
+		superior = #{superior,jdbcType=INTEGER},
+		telephone = #{telephone,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR}
+		where empno = #{empno,jdbcType=INTEGER}
+	</update>
+	<select id="selectEmpinfoByDoubleKey" parameterType="map" resultMap="AdvancedResultMap">
+		SELECT emp.*, dept.*, role.*, manager.empname supername FROM ((deptinfo dept LEFT JOIN empinfo emp ON emp.deptno = dept.deptno) LEFT JOIN roleinfo role ON emp.roleId = role.roleId) LEFT JOIN empinfo manager ON emp.superior = manager.empno
+		WHERE emp.empno = #{empno} AND emp.password = #{password}
+	</select>
+	<delete id="deleteEmpinfoByDeptno" parameterType="int">
+		DELETE FROM empinfo
+		WHERE deptno = #{_parameter}
+	</delete>
+	<delete id="deleteEmpinfoBatch" parameterType="list">
+		DELETE FROM empinfo
+		WHERE empno IN
+		<foreach item="item" collection="list" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="selectEmpinfoByPage" parameterType="map" resultMap="AdvancedResultMap">
+		SELECT emp.*, dept.*, role.*, manager.empname supername FROM ((deptinfo dept LEFT JOIN empinfo emp ON emp.deptno = dept.deptno) LEFT JOIN roleinfo role ON emp.roleId = role.roleId) LEFT JOIN empinfo manager ON emp.superior = manager.empno
+		<where>
+			<if test="key != null and key != ''">
+				AND (emp.empname LIKE '%${key}%' OR dept.deptname LIKE '%${key}%' OR emp.email LIKE '%${key}%' OR emp.telephone LIKE '%${key}%')
+			</if>
+			<if test="deptno != null and deptno != 0">
+				AND emp.deptno = #{deptno}
+			</if>
+			<if test="roleId != null">
+				AND emp.roleId = #{roleId}
+			</if>
+			<if test="superior != null">
+				AND emp.superior = #{superior}
+			</if>
+		</where>
+		ORDER BY emp.empno ASC LIMIT #{start}, #{length}
+	</select>
+</mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<context:component-scan base-package="com.tina">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+
+	<!-- 在添加alibaba-durid数据库连接时，若需要采用保密方式连接数据库，需要先行导入该属性文件 -->
+	<bean id="propertiesLoader" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<!-- classpath:代表当前文件所在的src指针文件夹路径，采用classpath:调用路径时，相当于调用相对路径 -->
+				<value>classpath:spring_springmvc_mybatis/localMysqlConfig.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 添加alibaba-druid连接池连接数据库，若需要采用保密方式连接数据库，需要导入属性文件 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="filters" value="config" />
+		<property name="connectionProperties" value="config.decrypt=true;config.decrypt.key=${publickey}"></property>
+		<!-- 最大并发连接数 -->
+		<property name="maxActive" value="${maxActive}" />
+		<!-- 初始化连接数量 -->
+		<property name="initialSize" value="${initialSize}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${maxWait}" />
+		<!-- 最小空闲连接数 -->
+		<property name="minIdle" value="${minIdle}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+		<property name="validationQuery" value="${validationQuery}" />
+		<property name="testWhileIdle" value="${testWhileIdle}" />
+		<property name="testOnBorrow" value="${testOnBorrow}" />
+		<property name="testOnReturn" value="${testOnReturn}" />
+		<property name="maxOpenPreparedStatements" value="${maxOpenPreparedStatements}" />
+		<!-- 打开 removeAbandoned 功能 -->
+		<property name="removeAbandoned" value="${removeAbandoned}" />
+		<!-- 1800 秒，也就是 30 分钟 -->
+		<property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}" />
+		<!-- 关闭 abanded 连接时输出错误日志 -->
+		<property name="logAbandoned" value="${logAbandoned}" />
+	</bean>
+
+	<!-- 开始创建sessionFactory，此时需要dataSource连接数据库 -->
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+		<property name="typeAliasesPackage" value="com.tina.entity"></property>
+	</bean>
+
+	<!-- 开始创建dao接口实现类，此时需要创建sessionFactory -->
+	<bean id="mapperManager" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.tina.dao"></property>
+		<property name="sqlSessionFactoryBeanName" value="sessionFactory"></property>
+	</bean>
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<tx:advice id="commonAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="remove*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="modify*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 日志管理 -->
+	<bean id="debugAspect" class="com.tina.aop.DebugAspect"></bean>
+	<!-- aop配置 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.tina.service..*(..))" id="serviceCut" />
+		<aop:advisor advice-ref="commonAdvice" pointcut-ref="serviceCut" />
+		<aop:aspect ref="debugAspect">
+			<aop:before method="startUp" pointcut-ref="serviceCut" />
+			<aop:after method="executeUp" pointcut-ref="serviceCut" />
+			<aop:after-returning method="returnUp" returning="result" pointcut-ref="serviceCut" />
+		</aop:aspect>
+	</aop:config>
+
+</beans>
